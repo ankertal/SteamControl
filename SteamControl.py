@@ -18,6 +18,7 @@ from pathlib import Path
 sys.path.append(os.path.join(os.path.dirname(__file__), "lib"))
 
 # get the relay functionality
+import relay 
 
 # temprature sensor related (global) values
 cs = 19
