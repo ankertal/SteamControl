@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
+import os
+import sys
+from pathlib import Path
+sys.path.append(os.path.join(os.path.dirname(__file__), "lib"))
 
-import relay
+# get the relay functionality
+import relay 
+
 import max6675
 import threading
 from threading import Lock
@@ -12,13 +18,6 @@ import logging
 import statistics
 # import max6675 module.
 
-import os
-import sys
-from pathlib import Path
-sys.path.append(os.path.join(os.path.dirname(__file__), "lib"))
-
-# get the relay functionality
-import relay 
 
 # temprature sensor related (global) values
 cs = 19
