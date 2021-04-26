@@ -362,5 +362,6 @@ if __name__ == '__main__':
     initSensor()
     x = threading.Thread(target=temprature_handling_thread)
     x.start()
+    relay.init_relay()
     relay.stop_relay()
     socketio.run(app, '0.0.0.0')
