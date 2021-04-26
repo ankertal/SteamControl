@@ -24,8 +24,8 @@ from threading import Timer
 import RPi.GPIO as GPIO
 import logging
 
-# our relay is controlled via GPIO pin 17 (BCM)
-CTL_OUT = 17
+# our relay is controlled via GPIO pin 16 (BCM)
+CTL_OUT = 16
     
 def init_relay():       
     # switch to BCM
