@@ -11,6 +11,17 @@ import logging
 import statistics
 # import max6675 module.
 
+
+# email support
+from send_email import *
+
+# get the relay functionality
+from relay import *
+
+# get the sms push notification functionality
+from notify import *
+
+
 # temprature sensor related (global) values
 cs = 19
 sck = 33
@@ -44,8 +55,19 @@ def turn_on_cooling():
 
     print("in turn on func, cooling state is: " + cooling_state)
     if cooling_state == 'Off':
-        print("turning on cooling system")
-        cooling_state = 'On'
+
+        # sanity check
+        cooling_is_on = relay.is_output_high()  # read from relay (HW)
+        if cooling_is_on:
+            # this is bad may indicate a serious bug
+            notify_phone.send_push_mesage('potential bug: relay is on when turn_on_cooling is called', datetime.now())
+            #stop_and_exit()	
+        else:
+            relay.start_relay()
+            notify_phone.send_push_mesage('cooling is ON', datetime.now())
+            send_email(EMAIL_TO, EMAIL_SUBJECT, 'Cooling is turned ON! \n\n time: %s\n\n' %  str(datetime.now()))
+            print("turning on cooling system")
+            cooling_state = 'On'
 
 
 def turn_off_cooling():
@@ -53,8 +75,19 @@ def turn_off_cooling():
 
     print("in turn off func, cooling state is: " + cooling_state)
     if cooling_state == 'On':
-        print("turning off cooling system")
-        cooling_state = 'Off'
+        # sanity check
+        cooling_is_on = relay.is_output_high()  # read from relay (HW)
+        if not cooling_is_on:
+            # this is bad may indicate a serious bug
+            #notify_phone.send_push_mesage('potential bug: relay is off when stop_boiler is called', datetime.now())
+            #stop_and_exit()	
+        else:
+            relay.stop_relay()
+            #
+            # notify_phone.send_push_mesage('Cooling is turned OFF @ min' , datetime.now())
+            send_email(EMAIL_TO, EMAIL_SUBJECT, 'Cooling is turned OFF! \n\n time: %s\n\n' %  str(datetime.now()))
+            print("turning off cooling system")
+            cooling_state = 'Off'
 
 
 def initSensor():
@@ -326,4 +359,5 @@ if __name__ == '__main__':
     initSensor()
     x = threading.Thread(target=temprature_handling_thread)
     x.start()
+    relay.stop_relay()
     socketio.run(app, '0.0.0.0')
