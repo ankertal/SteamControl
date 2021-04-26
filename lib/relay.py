@@ -56,12 +56,12 @@ def test_relay():
    """Test relay on and off cycle"""
    
    # check if the output is high
-   print 'current control output is: ', is_output_high(), ' (should be off)'
+   print('current control output is: ' + is_output_high() + ' (should be off)')
 
    # start the relay
    start_relay()
 
-   print 'current control output is: ', is_output_high(), ' (should be on)'
+   print('current control output is: ' +  is_output_high() +' (should be on)')
    
    # setup a timer to stop the relay after 5 seconds
    t = Timer(5, stop_relay)
