@@ -12,15 +12,8 @@ import statistics
 # import max6675 module.
 
 
-# email support
-from send_email import *
-
 # get the relay functionality
 from relay import *
-
-# get the sms push notification functionality
-from notify import *
-
 
 # temprature sensor related (global) values
 cs = 19
