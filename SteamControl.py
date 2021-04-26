@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import relay
 import max6675
 import threading
 from threading import Lock
@@ -11,11 +12,12 @@ import logging
 import statistics
 # import max6675 module.
 
-import os, sys
-sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
+import os
+import sys
+from pathlib import Path
+sys.path.append(os.path.join(os.path.dirname(__file__), "lib"))
 
 # get the relay functionality
-from relay import *
 
 # temprature sensor related (global) values
 cs = 19
@@ -54,11 +56,12 @@ def turn_on_cooling():
         cooling_is_on = relay.is_output_high()  # read from relay (HW)
         if cooling_is_on:
             # this is bad may indicate a serious bug
-            logging.getLogger('RelayLogger').debug('Turn-On was called when already cooling is on. cleanup GPIO system')
+            logging.getLogger('RelayLogger').debug(
+                'Turn-On was called when already cooling is on. cleanup GPIO system')
             print("Turn-On was called when cooling is already on!")
 
             #notify_phone.send_push_mesage('potential bug: relay is on when turn_on_cooling is called', datetime.now())
-            #stop_and_exit()	
+            # stop_and_exit()
         else:
             relay.start_relay()
             #notify_phone.send_push_mesage('cooling is ON', datetime.now())
@@ -76,10 +79,11 @@ def turn_off_cooling():
         cooling_is_on = relay.is_output_high()  # read from relay (HW)
         if not cooling_is_on:
             # this is bad may indicate a serious bug
-            logging.getLogger('RelayLogger').debug('Turn-Off was called when already cooling is off. cleanup GPIO system')
+            logging.getLogger('RelayLogger').debug(
+                'Turn-Off was called when already cooling is off. cleanup GPIO system')
             print("Turn-Off was called when already cooling is off!")
             #notify_phone.send_push_mesage('potential bug: relay is off when stop_boiler is called', datetime.now())
-            #stop_and_exit()	
+            # stop_and_exit()
         else:
             relay.stop_relay()
             #
