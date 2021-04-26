@@ -11,6 +11,8 @@ import logging
 import statistics
 # import max6675 module.
 
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
 
 # get the relay functionality
 from relay import *
