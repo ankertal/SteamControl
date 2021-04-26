@@ -29,14 +29,15 @@ CTL_OUT = 16
     
 def init_relay():       
     # switch to BCM
-   # GPIO.setmode(GPIO.BCM)
+    # GPIO.setmode(GPIO.BCM)
 
     # disable warning of used ports
-   # GPIO.setwarnings(False)
+    # GPIO.setwarnings(False)
 
     # set the port as output port
     #GPIO.setup(CTL_OUT, GPIO.OUT)
-
+    print('relay init')
+    
 def start_relay():
     GPIO.setup(CTL_OUT, GPIO.OUT)
     GPIO.output(CTL_OUT, GPIO.HIGH)
