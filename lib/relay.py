@@ -39,14 +39,14 @@ def init_relay():
 
 def start_relay():
     GPIO.output(CTL_OUT, GPIO.HIGH)
-    logging.getLogger('BoilerLogger').debug('relay is on')
+    logging.getLogger('RelayLogger').debug('relay is on')
 
 def stop_relay():
     GPIO.output(CTL_OUT, GPIO.LOW)
-    logging.getLogger('BoilerLogger').debug('relay is off')
+    logging.getLogger('RelayLogger').debug('relay is off')
 
 def cleanup():
-    logging.getLogger('BoilerLogger').debug('cleanup GPIO system')
+    logging.getLogger('RelayLogger').debug('cleanup GPIO system')
     GPIO.cleanup()
 
 def is_output_high():

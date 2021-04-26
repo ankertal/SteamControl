@@ -36,14 +36,13 @@ temp = 'N/A'
 cooling_state = 'Off'
 
 
-log = logging.getLogger('werkzeug')
+log = logging.getLogger('SteamControl')
 log.setLevel(logging.ERROR)
 
 async_mode = None
 app = Flask(__name__)
 
 
-# app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode,
                     temp=temp, cooling_state=cooling_state)
 thread = None
@@ -60,12 +59,15 @@ def turn_on_cooling():
         cooling_is_on = relay.is_output_high()  # read from relay (HW)
         if cooling_is_on:
             # this is bad may indicate a serious bug
-            notify_phone.send_push_mesage('potential bug: relay is on when turn_on_cooling is called', datetime.now())
+            logging.getLogger('RelayLogger').debug('Turn-On was called when already cooling is on. cleanup GPIO system')
+            print("Turn-On was called when cooling is already on!")
+
+            #notify_phone.send_push_mesage('potential bug: relay is on when turn_on_cooling is called', datetime.now())
             #stop_and_exit()	
         else:
             relay.start_relay()
-            notify_phone.send_push_mesage('cooling is ON', datetime.now())
-            send_email(EMAIL_TO, EMAIL_SUBJECT, 'Cooling is turned ON! \n\n time: %s\n\n' %  str(datetime.now()))
+            #notify_phone.send_push_mesage('cooling is ON', datetime.now())
+            #send_email(EMAIL_TO, EMAIL_SUBJECT, 'Cooling is turned ON! \n\n time: %s\n\n' %  str(datetime.now()))
             print("turning on cooling system")
             cooling_state = 'On'
 
@@ -79,13 +81,15 @@ def turn_off_cooling():
         cooling_is_on = relay.is_output_high()  # read from relay (HW)
         if not cooling_is_on:
             # this is bad may indicate a serious bug
+            logging.getLogger('RelayLogger').debug('Turn-Off was called when already cooling is off. cleanup GPIO system')
+            print("Turn-Off was called when already cooling is off!")
             #notify_phone.send_push_mesage('potential bug: relay is off when stop_boiler is called', datetime.now())
             #stop_and_exit()	
         else:
             relay.stop_relay()
             #
             # notify_phone.send_push_mesage('Cooling is turned OFF @ min' , datetime.now())
-            send_email(EMAIL_TO, EMAIL_SUBJECT, 'Cooling is turned OFF! \n\n time: %s\n\n' %  str(datetime.now()))
+            #send_email(EMAIL_TO, EMAIL_SUBJECT, 'Cooling is turned OFF! \n\n time: %s\n\n' %  str(datetime.now()))
             print("turning off cooling system")
             cooling_state = 'Off'
 
